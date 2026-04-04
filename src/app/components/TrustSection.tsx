@@ -1,40 +1,16 @@
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Shield, Activity, BarChart2, Users } from 'lucide-react';
+import { Shield, Activity, Headphones, FileCheck } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export function TrustSection() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const { ref, isVisible } = useScrollReveal();
 
   const trustFactors = [
-    {
-      icon: Shield,
-      key: 'trust.stability',
-      desc: language === 'zh'
-        ? '默认遵循最小必要原则处理提供服务所需的信息，企业客户可进一步沟通数据处理需求。'
-        : 'We aim to process only the information required to provide the service, with further data handling options available for enterprise customers.'
-    },
-    {
-      icon: Activity,
-      key: 'trust.security',
-      desc: language === 'zh'
-        ? '平台设计将遵循 API Key 管理与权限分层原则，后续支持企业级访问控制能力扩展。'
-        : 'The platform is being designed with API key management, access boundaries, and account control in mind, with enterprise access control coming progressively.'
-    },
-    {
-      icon: BarChart2,
-      key: 'trust.support',
-      desc: language === 'zh'
-        ? '平台目标为提供稳定、可观测的模型接入服务，将逐步提供状态监控与用量管理能力。'
-        : 'Our goal is to deliver stable, observable model access with progressive improvements to monitoring, logging, and usage management.'
-    },
-    {
-      icon: Users,
-      key: 'trust.sla',
-      desc: language === 'zh'
-        ? '支持企业咨询与定制化接入方案，可根据业务需求讨论私有化 / 混合架构方案。'
-        : 'We support enterprise consultation and custom integration. Private or hybrid deployment discussions are available based on your business needs.'
-    }
+    { icon: Activity, key: 'trust.stability', descKey: 'trust.stability.desc' },
+    { icon: Shield, key: 'trust.security', descKey: 'trust.security.desc' },
+    { icon: Headphones, key: 'trust.support', descKey: 'trust.support.desc' },
+    { icon: FileCheck, key: 'trust.sla', descKey: 'trust.sla.desc' }
   ];
 
   return (
@@ -44,10 +20,8 @@ export function TrustSection() {
           <h2 className="text-4xl font-bold text-white mb-4">
             {t('trust.title')}
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            {language === 'zh'
-              ? '我们理解企业客户对数据处理、权限边界与服务稳定性的关注。GAIAAPI 的平台设计将持续围绕安全、控制与可协作性进行完善。'
-              : 'We recognize enterprise concerns around data handling, access boundaries, and service stability. GAIAAPI is being developed with these priorities in mind.'}
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            {t('trust.subtitle')}
           </p>
         </div>
 
@@ -57,20 +31,36 @@ export function TrustSection() {
             return (
               <div
                 key={index}
-                className="flex flex-col p-6 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all"
+                className="flex flex-col items-center text-center p-6 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all"
               >
-                <div className="p-3 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl mb-4 w-fit">
-                  <Icon className="w-6 h-6 text-blue-400" />
+                <div className="p-4 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full mb-4">
+                  <Icon className="w-8 h-8 text-blue-400" />
                 </div>
-                <h3 className="text-base font-semibold text-white mb-2">
+                <h3 className="text-lg font-semibold text-white mb-2">
                   {t(factor.key)}
                 </h3>
                 <p className="text-sm text-gray-400 leading-relaxed">
-                  {factor.desc}
+                  {t(factor.descKey)}
                 </p>
               </div>
             );
           })}
+        </div>
+
+        {/* Stats */}
+        <div className="grid md:grid-cols-3 gap-8 mt-16">
+          {[
+            { value: '99.9%', label: 'Uptime SLA' },
+            { value: '< 200ms', label: 'Avg Response Time' },
+            { value: '24/7', label: 'Technical Support' }
+          ].map((stat, index) => (
+            <div key={index} className="text-center">
+              <div className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
+                {stat.value}
+              </div>
+              <div className="text-gray-400">{stat.label}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

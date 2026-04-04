@@ -1,5 +1,5 @@
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Code, FileText, Bot, Globe2, Video, Layers } from 'lucide-react';
+import { Code, FileText, Bot, Globe2, Video, Workflow } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export function SolutionsSection() {
@@ -20,10 +20,10 @@ export function SolutionsSection() {
       gradient: 'from-purple-500 to-pink-500'
     },
     {
-      icon: Video,
-      titleKey: 'solutions.digital.title',
-      descKey: 'solutions.digital.desc',
-      gradient: 'from-pink-500 to-rose-500'
+      icon: Bot,
+      titleKey: 'solutions.enterprise.title',
+      descKey: 'solutions.enterprise.desc',
+      gradient: 'from-green-500 to-emerald-500'
     },
     {
       icon: Globe2,
@@ -32,16 +32,16 @@ export function SolutionsSection() {
       gradient: 'from-orange-500 to-red-500'
     },
     {
-      icon: Bot,
-      titleKey: 'solutions.enterprise.title',
-      descKey: 'solutions.enterprise.desc',
-      gradient: 'from-green-500 to-emerald-500'
+      icon: Video,
+      titleKey: 'solutions.digital.title',
+      descKey: 'solutions.digital.desc',
+      gradient: 'from-indigo-500 to-purple-500'
     },
     {
-      icon: Layers,
+      icon: Workflow,
       titleKey: 'solutions.workflow.title',
       descKey: 'solutions.workflow.desc',
-      gradient: 'from-violet-500 to-indigo-500'
+      gradient: 'from-teal-500 to-cyan-500'
     }
   ];
 

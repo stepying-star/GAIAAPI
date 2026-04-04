@@ -36,8 +36,8 @@ const translations = {
 
     // Features
     'features.badge1': 'OpenAI Compatible',
-    'features.badge2': 'Multi-Model Access',
-    'features.badge3': 'Cost-Aware Routing',
+    'features.badge2': '多模型路由',
+    'features.badge3': '成本优化',
     'features.badge4': '企业级',
 
     // Why Choose
@@ -87,25 +87,30 @@ const translations = {
 
     // Solutions
     'solutions.title': '面向真实业务场景的 AI 接入能力',
-    'solutions.developers.title': 'AI 应用开发',
-    'solutions.developers.desc': '快速接入多种模型能力，减少重复开发，加速产品迭代与上线。',
-    'solutions.content.title': '内容与营销自动化',
-    'solutions.content.desc': '根据内容任务类型智能选择最优模型，降低内容生产成本。',
-    'solutions.digital.title': '数字人内容生产',
-    'solutions.digital.desc': '统一接入语音、图像与视频模型，支持数字人场景灵活调用。',
+    'solutions.developers.title': '应用开发团队',
+    'solutions.developers.desc': '快速接入多种模型，加速产品迭代',
+    'solutions.content.title': '内容与营销自动化平台',
+    'solutions.content.desc': '智能选择最优模型生成内容',
+    'solutions.enterprise.title': '企业知识助手 / 智能客服',
+    'solutions.enterprise.desc': '稳定可靠的企业级 AI 能力',
     'solutions.global.title': '多语言出海内容系统',
-    'solutions.global.desc': '支持东南亚等多地区语言模型，帮助出海业务实现本地化内容生产。',
-    'solutions.enterprise.title': '企业知识助手',
-    'solutions.enterprise.desc': '稳定可靠的企业级 AI 能力，支持知识问答与智能客服场景。',
+    'solutions.global.desc': '支持东南亚等多地区语言模型',
+    'solutions.digital.title': '数字人内容生产',
+    'solutions.digital.desc': '统一调用文本、图像、音频与视频模型，构建数字人生成流水线',
     'solutions.workflow.title': '定制化 AI 工作流',
-    'solutions.workflow.desc': '根据业务逻辑构建定制调用流程，为不同任务分配最合适的模型。',
+    'solutions.workflow.desc': '灵活组合多模型能力，构建企业专属的智能工作流',
 
     // Trust
     'trust.title': '安全、稳定、面向企业协作',
+    'trust.subtitle': '在可控边界内提供灵活的模型调用能力',
     'trust.stability': '最小化数据处理原则',
+    'trust.stability.desc': '仅处理模型调用所需数据，不存储用户业务内容',
     'trust.security': '访问控制与密钥管理规划',
+    'trust.security.desc': '支持密钥隔离、权限管理与审计日志',
     'trust.support': '稳定性与可观测性建设',
+    'trust.support.desc': '实时监控、故障告警与多模型冗余架构',
     'trust.sla': '企业合作与定制支持',
+    'trust.sla.desc': '支持 NDA 签署、定制化接入与专属技术支持',
 
     // FAQ
     'faq.title': '常见问题',
@@ -146,8 +151,8 @@ const translations = {
 
     // Features
     'features.badge1': 'OpenAI Compatible',
-    'features.badge2': 'Multi-Model Access',
-    'features.badge3': 'Cost-Aware Routing',
+    'features.badge2': 'Multi-Model Routing',
+    'features.badge3': 'Cost Optimization',
     'features.badge4': 'Enterprise Ready',
 
     // Why Choose
@@ -197,25 +202,30 @@ const translations = {
 
     // Solutions
     'solutions.title': 'Designed for Real Business Workflows',
-    'solutions.developers.title': 'AI Application Development',
-    'solutions.developers.desc': 'Integrate multiple model capabilities faster, reduce redundant development, and accelerate product launch.',
+    'solutions.developers.title': 'Application Development Teams',
+    'solutions.developers.desc': 'Rapid multi-model integration for faster iteration',
     'solutions.content.title': 'Content & Marketing Automation',
-    'solutions.content.desc': 'Intelligently select the best model for each content task and reduce production costs.',
-    'solutions.digital.title': 'Digital Human Content Production',
-    'solutions.digital.desc': 'Unified access to speech, image, and video models for flexible digital human workflows.',
-    'solutions.global.title': 'Multilingual Global Content',
-    'solutions.global.desc': 'Support for SEA and multi-region language models to power localized content at scale.',
+    'solutions.content.desc': 'Intelligently select optimal models for content',
     'solutions.enterprise.title': 'Enterprise Knowledge Assistant',
-    'solutions.enterprise.desc': 'Reliable, enterprise-grade AI for knowledge Q&A and intelligent customer service.',
+    'solutions.enterprise.desc': 'Reliable enterprise-grade AI capabilities',
+    'solutions.global.title': 'Multilingual Global Content',
+    'solutions.global.desc': 'Support for SEA and multi-region language models',
+    'solutions.digital.title': 'Digital Human Content Production',
+    'solutions.digital.desc': 'Unified access to text, image, audio, and video models for digital human pipelines',
     'solutions.workflow.title': 'Custom AI Workflows',
-    'solutions.workflow.desc': 'Build tailored calling flows by business logic and assign the right model to each task.',
+    'solutions.workflow.desc': 'Flexibly combine multi-model capabilities to build enterprise-specific intelligent workflows',
 
     // Trust
     'trust.title': 'Built for Reliability and Enterprise Collaboration',
+    'trust.subtitle': 'Flexible model access within controlled boundaries',
     'trust.stability': 'Data Minimization Principles',
-    'trust.security': 'Access Control & API Key Management',
+    'trust.stability.desc': 'Process only data required for model calls, no storage of business content',
+    'trust.security': 'Access Control & Key Management',
+    'trust.security.desc': 'Support for key isolation, permission management, and audit logs',
     'trust.support': 'Stability & Observability',
-    'trust.sla': 'Enterprise Collaboration & Custom Support',
+    'trust.support.desc': 'Real-time monitoring, failure alerts, and multi-model redundancy',
+    'trust.sla': 'Enterprise Collaboration & Support',
+    'trust.sla.desc': 'NDA support, custom integration, and dedicated technical assistance',
 
     // FAQ
     'faq.title': 'Frequently Asked Questions',

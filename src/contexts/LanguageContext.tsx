@@ -59,7 +59,7 @@ const translations = {
     'capabilities.routing.desc': '按规则路由，主力模型异常时自动切换备选',
     'capabilities.cost.title': '成本优化策略',
     'capabilities.cost.desc': '按任务复杂度匹配模型，不为简单任务付高价',
-    'capabilities.billing.title': 'Usage / Billing 面板',
+    'capabilities.billing.title': '使用量与计费面板',
     'capabilities.billing.desc': '实时用量监控与成本分析',
     'capabilities.multimodal.title': '多模态支持',
     'capabilities.multimodal.desc': '文本 / 图像 / 音频 / 视频统一调用',
@@ -71,7 +71,7 @@ const translations = {
     'models.image': '图像模型',
     'models.video': '视频模型',
     'models.audio': '音频模型',
-    'models.embedding': 'Embedding',
+    'models.embedding': '嵌入向量',
     'models.cta': '查看全部模型',
 
     // Code Integration

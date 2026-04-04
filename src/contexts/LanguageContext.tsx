@@ -24,30 +24,30 @@ const translations = {
 
     // Brand
     'brand.name': 'GAIA词元',
-    'brand.tagline': '多模型接口聚合，一次接入，灵活切换',
+    'brand.tagline': '统一接入多模型的 AI 接口平台',
 
     // Hero
-    'hero.title': '一套接口，对接多家模型供应商',
-    'hero.subtitle': '换模型不换代码。按任务成本分配调用，稳定交付。',
-    'hero.description': '支持文本、图像、音频与视频模型统一调用。',
-    'hero.cta.start': '立即开始',
+    'hero.title': '一个接口，接入多种 AI 模型',
+    'hero.subtitle': '让模型调用更灵活，让成本更可控。',
+    'hero.description': 'GAIAAPI 帮助开发者与企业统一接入文本、图像、音频与视频模型，加快产品上线与业务落地。',
+    'hero.cta.start': '申请试用',
     'hero.cta.docs': '查看文档',
-    'hero.cta.demo': '预约演示',
+    'hero.cta.demo': '联系合作',
 
     // Features
     'features.badge1': 'OpenAI Compatible',
-    'features.badge2': '多模型路由',
-    'features.badge3': '成本优化',
+    'features.badge2': 'Multi-Model Access',
+    'features.badge3': 'Cost-Aware Routing',
     'features.badge4': '企业级',
 
     // Why Choose
     'why.title': '为什么选择 GAIAAPI',
-    'why.cost.title': '降低模型调用成本',
-    'why.cost.desc': '对接多家模型供应能力，根据任务类型选择更具性价比的模型，降低单一大模型依赖成本',
-    'why.vendor.title': '避免单一供应商锁定',
-    'why.vendor.desc': '可在不同模型之间快速切换，支持统一接口结构，便于长期产品路线调整',
-    'why.reliability.title': '提高可用性与交付稳定性',
-    'why.reliability.desc': '支持路由切换，支持模型冗余方案，支持统一监控与用量管理',
+    'why.cost.title': '一个接口，连接多种模型',
+    'why.cost.desc': '无需为不同模型厂商重复开发，统一接入文本、图像、音频与视频能力。',
+    'why.vendor.title': '更灵活地控制调用成本',
+    'why.vendor.desc': '不必默认调用最贵模型，可根据任务复杂度选择更适合的模型组合。',
+    'why.reliability.title': '更适合企业与产品长期演进',
+    'why.reliability.desc': '减少对单一模型供应商的依赖，为后续产品升级、国际化与企业接入预留空间。',
 
     // Capabilities
     'capabilities.title': '核心能力',
@@ -86,30 +86,34 @@ const translations = {
     'cost.savings': '成本优化空间',
 
     // Solutions
-    'solutions.title': '适用场景',
-    'solutions.developers.title': '应用开发团队',
-    'solutions.developers.desc': '快速接入多种模型，加速产品迭代',
-    'solutions.content.title': '内容与营销自动化平台',
-    'solutions.content.desc': '智能选择最优模型生成内容',
-    'solutions.enterprise.title': '企业知识助手 / 智能客服',
-    'solutions.enterprise.desc': '稳定可靠的企业级 AI 能力',
+    'solutions.title': '面向真实业务场景的 AI 接入能力',
+    'solutions.developers.title': 'AI 应用开发',
+    'solutions.developers.desc': '快速接入多种模型能力，减少重复开发，加速产品迭代与上线。',
+    'solutions.content.title': '内容与营销自动化',
+    'solutions.content.desc': '根据内容任务类型智能选择最优模型，降低内容生产成本。',
+    'solutions.digital.title': '数字人内容生产',
+    'solutions.digital.desc': '统一接入语音、图像与视频模型，支持数字人场景灵活调用。',
     'solutions.global.title': '多语言出海内容系统',
-    'solutions.global.desc': '支持东南亚等多地区语言模型',
+    'solutions.global.desc': '支持东南亚等多地区语言模型，帮助出海业务实现本地化内容生产。',
+    'solutions.enterprise.title': '企业知识助手',
+    'solutions.enterprise.desc': '稳定可靠的企业级 AI 能力，支持知识问答与智能客服场景。',
+    'solutions.workflow.title': '定制化 AI 工作流',
+    'solutions.workflow.desc': '根据业务逻辑构建定制调用流程，为不同任务分配最合适的模型。',
 
     // Trust
-    'trust.title': '企业级信任',
-    'trust.stability': '稳定性保障',
-    'trust.security': '数据安全合规',
-    'trust.support': '7x24 技术支持',
-    'trust.sla': '企业级 SLA',
+    'trust.title': '安全、稳定、面向企业协作',
+    'trust.stability': '最小化数据处理原则',
+    'trust.security': '访问控制与密钥管理规划',
+    'trust.support': '稳定性与可观测性建设',
+    'trust.sla': '企业合作与定制支持',
 
     // FAQ
     'faq.title': '常见问题',
 
     // CTA
-    'cta.title': '立即接入 GAIAAPI，开始构建更灵活、更可控的 AI 应用。',
-    'cta.getkey': '获取 API Key',
-    'cta.contact': '联系销售',
+    'cta.title': '开始构建更灵活、更可控的 AI 应用接入层。',
+    'cta.getkey': '申请试用',
+    'cta.contact': '联系合作',
 
     // Footer
     'footer.product': '产品',
@@ -134,26 +138,26 @@ const translations = {
 
     // Hero
     'hero.title': 'One API for Multiple AI Models',
-    'hero.subtitle': 'Switch models without changing code. Route by cost, deliver reliably.',
-    'hero.description': 'Unify access to text, image, audio, and video models.',
-    'hero.cta.start': 'Get API Key',
+    'hero.subtitle': 'More flexible access. More controllable cost.',
+    'hero.description': 'GAIAAPI helps developers and enterprises unify access to text, image, audio, and video models for faster launch and better operational efficiency.',
+    'hero.cta.start': 'Request Access',
     'hero.cta.docs': 'View Docs',
-    'hero.cta.demo': 'Book Demo',
+    'hero.cta.demo': 'Contact Sales',
 
     // Features
     'features.badge1': 'OpenAI Compatible',
-    'features.badge2': 'Multi-Model Routing',
-    'features.badge3': 'Cost Optimization',
+    'features.badge2': 'Multi-Model Access',
+    'features.badge3': 'Cost-Aware Routing',
     'features.badge4': 'Enterprise Ready',
 
     // Why Choose
     'why.title': 'Why Choose GAIAAPI',
-    'why.cost.title': 'Reduce Model Calling Costs',
-    'why.cost.desc': 'Connect to multiple model providers and select cost-effective models based on task type, reducing dependency on expensive single models',
-    'why.vendor.title': 'Avoid Vendor Lock-in',
-    'why.vendor.desc': 'Quickly switch between different models with unified interface structure for long-term product flexibility',
-    'why.reliability.title': 'Improve Availability & Stability',
-    'why.reliability.desc': 'Support routing switching, model redundancy, unified monitoring and usage management',
+    'why.cost.title': 'One interface for multiple models',
+    'why.cost.desc': 'Avoid rebuilding separately for every provider. Access text, image, audio, and video models through a unified layer.',
+    'why.vendor.title': 'Better cost control through model choice',
+    'why.vendor.desc': 'Instead of defaulting to the most expensive model, route workloads based on task complexity and business needs.',
+    'why.reliability.title': 'Built for long-term product flexibility',
+    'why.reliability.desc': 'Reduce vendor lock-in and prepare your AI stack for growth, enterprise use, and international expansion.',
 
     // Capabilities
     'capabilities.title': 'Core Capabilities',
@@ -192,29 +196,33 @@ const translations = {
     'cost.savings': 'Cost Optimization Potential',
 
     // Solutions
-    'solutions.title': 'Use Cases',
-    'solutions.developers.title': 'Application Development Teams',
-    'solutions.developers.desc': 'Rapid multi-model integration for faster iteration',
+    'solutions.title': 'Designed for Real Business Workflows',
+    'solutions.developers.title': 'AI Application Development',
+    'solutions.developers.desc': 'Integrate multiple model capabilities faster, reduce redundant development, and accelerate product launch.',
     'solutions.content.title': 'Content & Marketing Automation',
-    'solutions.content.desc': 'Intelligently select optimal models for content',
-    'solutions.enterprise.title': 'Enterprise Knowledge Assistant',
-    'solutions.enterprise.desc': 'Reliable enterprise-grade AI capabilities',
+    'solutions.content.desc': 'Intelligently select the best model for each content task and reduce production costs.',
+    'solutions.digital.title': 'Digital Human Content Production',
+    'solutions.digital.desc': 'Unified access to speech, image, and video models for flexible digital human workflows.',
     'solutions.global.title': 'Multilingual Global Content',
-    'solutions.global.desc': 'Support for SEA and multi-region language models',
+    'solutions.global.desc': 'Support for SEA and multi-region language models to power localized content at scale.',
+    'solutions.enterprise.title': 'Enterprise Knowledge Assistant',
+    'solutions.enterprise.desc': 'Reliable, enterprise-grade AI for knowledge Q&A and intelligent customer service.',
+    'solutions.workflow.title': 'Custom AI Workflows',
+    'solutions.workflow.desc': 'Build tailored calling flows by business logic and assign the right model to each task.',
 
     // Trust
-    'trust.title': 'Enterprise Trust',
-    'trust.stability': 'Stability Guarantee',
-    'trust.security': 'Data Security & Compliance',
-    'trust.support': '24/7 Technical Support',
-    'trust.sla': 'Enterprise SLA',
+    'trust.title': 'Built for Reliability and Enterprise Collaboration',
+    'trust.stability': 'Data Minimization Principles',
+    'trust.security': 'Access Control & API Key Management',
+    'trust.support': 'Stability & Observability',
+    'trust.sla': 'Enterprise Collaboration & Custom Support',
 
     // FAQ
     'faq.title': 'Frequently Asked Questions',
 
     // CTA
-    'cta.title': 'Build with GAIAAPI and launch flexible, cost-aware AI applications faster.',
-    'cta.getkey': 'Get API Key',
+    'cta.title': 'Build a more flexible and cost-aware AI access layer with GAIAAPI.',
+    'cta.getkey': 'Request Access',
     'cta.contact': 'Contact Sales',
 
     // Footer

@@ -10,45 +10,53 @@ export function FAQSection() {
 
   const faqs = language === 'zh' ? [
     {
-      question: 'GAIAAPI 是什么？',
-      answer: 'GAIAAPI 是一个统一的 AI 模型接入平台，让开发者通过一个接口访问多种 AI 模型，包括文本、图像、音频和视频模型。我们提供 OpenAI 兼容的 API，支持智能路由和成本优化。'
+      question: 'GAIAAPI、GAIA词元、GAIA API MART 是什么关系？',
+      answer: 'GAIAAPI 是统一产品名与主域名。GAIA词元 是我们在中文市场的品牌表达，强调模型调用、成本控制与本地化；GAIA API MART 是英文国际化品牌名，强调统一接入、模型聚合与开发者友好体验。三者指向同一个产品。'
     },
     {
-      question: 'GAIA词元 和 GAIA API MART 是同一个产品吗？',
-      answer: '是的，GAIA词元是我们的中文品牌名，GAIA API MART 是英文国际化品牌名，但都指向同一个产品 GAIAAPI。我们使用双品牌策略来更好地服务不同市场的用户。'
+      question: '是否兼容 OpenAI 风格接口？',
+      answer: '是的。如果您已经熟悉 OpenAI 风格的接口调用方式，只需将 base_url 替换为 GAIAAPI 的地址，即可快速完成迁移与接入，无需修改其他代码逻辑。'
     },
     {
-      question: '是否兼容 OpenAI SDK？',
-      answer: '完全兼容！您只需要修改 base_url 为我们的 API 地址，无需修改任何其他代码。支持 Python、Node.js、Go 等所有 OpenAI 官方 SDK。'
+      question: '如何帮助控制模型使用成本？',
+      answer: 'GAIAAPI 支持根据任务复杂度与业务目标，将不同请求路由至更合适的模型，避免所有任务都默认调用高成本模型。这有助于企业更合理地分配 AI 调用预算。'
     },
     {
-      question: '如何帮助企业降低成本？',
-      answer: '我们通过智能路由根据任务类型自动选择性价比最优的模型，避免所有请求都使用最贵的模型。同时支持多个模型供应商，让您能够灵活选择价格更优的替代方案。'
+      question: '是否支持企业客户合作？',
+      answer: '支持。我们可以与企业客户进一步沟通接入方式、服务边界与项目支持方案。如有需要，可讨论 NDA、服务范围说明或定制化集成支持。'
     },
     {
-      question: '是否支持企业级合作？',
-      answer: '支持！我们提供企业级 SLA、专属技术支持、定制路由策略、私有化部署等服务。欢迎联系我们的销售团队了解详情。'
+      question: '是否支持中文与国际客户？',
+      answer: '支持。GAIAAPI 采用双品牌与双语言策略，面向中文市场以 GAIA词元 呈现，面向国际市场以 GAIA API MART 呈现。我们的平台与文档同时支持中英文环境。'
+    },
+    {
+      question: '是否提供定制方案？',
+      answer: '可以。对于有特定需求的企业客户，我们支持讨论定制路由策略、私有化 / 混合架构方案及专属接入支持。请联系我们了解详情。'
     }
   ] : [
     {
-      question: 'What is GAIAAPI?',
-      answer: 'GAIAAPI is a unified AI model access platform that lets developers access multiple AI models through a single interface, including text, image, audio, and video models. We provide OpenAI-compatible APIs with intelligent routing and cost optimization.'
+      question: 'What is the relationship between GAIAAPI, GAIA词元, and GAIA API MART?',
+      answer: 'GAIAAPI is the unified product name and main domain. GAIA词元 is our Chinese market brand, emphasizing model routing, cost control, and localization. GAIA API MART is our international brand, focusing on unified access, model aggregation, and developer experience. All three refer to the same product.'
     },
     {
-      question: 'Are GAIA词元 and GAIA API MART the same product?',
-      answer: 'Yes, GAIA词元 is our Chinese brand name and GAIA API MART is our English international brand name, but both refer to the same product GAIAAPI. We use a dual-brand strategy to better serve users in different markets.'
+      question: 'Is it compatible with OpenAI-style APIs?',
+      answer: 'Yes. If your team already works with OpenAI-style APIs, you only need to replace the base_url with the GAIAAPI endpoint to complete integration — no other code changes required.'
     },
     {
-      question: 'Is it compatible with OpenAI SDK?',
-      answer: 'Fully compatible! You only need to change the base_url to our API address without modifying any other code. Supports all official OpenAI SDKs including Python, Node.js, Go, and more.'
-    },
-    {
-      question: 'How does it help reduce costs?',
-      answer: 'We use intelligent routing to automatically select the most cost-effective model based on task type, avoiding using the most expensive model for all requests. We also support multiple model providers, allowing you to flexibly choose more affordable alternatives.'
+      question: 'How does it help control model usage costs?',
+      answer: 'GAIAAPI supports routing requests to more appropriate models based on task complexity and business goals, avoiding the default of calling high-cost models for every task. This helps enterprises allocate their AI budget more effectively.'
     },
     {
       question: 'Do you support enterprise partnerships?',
-      answer: 'Yes! We provide enterprise SLA, dedicated technical support, custom routing strategies, private deployment, and more. Contact our sales team for details.'
+      answer: 'Yes. We can discuss integration approaches, service boundaries, and implementation support with enterprise customers. NDA discussions, service scoping, and project-based support are available upon request.'
+    },
+    {
+      question: 'Do you support both Chinese and international customers?',
+      answer: 'Yes. GAIAAPI uses a dual-brand and bilingual strategy — GAIA词元 for Chinese contexts and GAIA API MART for international markets. Our platform and documentation support both Chinese and English environments.'
+    },
+    {
+      question: 'Do you offer custom solutions?',
+      answer: 'Yes. For enterprise customers with specific requirements, we can discuss custom routing strategies, private or hybrid deployment options, and dedicated integration support. Please contact us to learn more.'
     }
   ];
 

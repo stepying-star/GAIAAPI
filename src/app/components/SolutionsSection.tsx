@@ -1,5 +1,5 @@
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Code, FileText, Bot, Globe2 } from 'lucide-react';
+import { Code, FileText, Bot, Globe2, Video, Layers } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export function SolutionsSection() {
@@ -20,16 +20,28 @@ export function SolutionsSection() {
       gradient: 'from-purple-500 to-pink-500'
     },
     {
-      icon: Bot,
-      titleKey: 'solutions.enterprise.title',
-      descKey: 'solutions.enterprise.desc',
-      gradient: 'from-green-500 to-emerald-500'
+      icon: Video,
+      titleKey: 'solutions.digital.title',
+      descKey: 'solutions.digital.desc',
+      gradient: 'from-pink-500 to-rose-500'
     },
     {
       icon: Globe2,
       titleKey: 'solutions.global.title',
       descKey: 'solutions.global.desc',
       gradient: 'from-orange-500 to-red-500'
+    },
+    {
+      icon: Bot,
+      titleKey: 'solutions.enterprise.title',
+      descKey: 'solutions.enterprise.desc',
+      gradient: 'from-green-500 to-emerald-500'
+    },
+    {
+      icon: Layers,
+      titleKey: 'solutions.workflow.title',
+      descKey: 'solutions.workflow.desc',
+      gradient: 'from-violet-500 to-indigo-500'
     }
   ];
 
@@ -42,7 +54,7 @@ export function SolutionsSection() {
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {solutions.map((solution, index) => {
             const Icon = solution.icon;
             return (

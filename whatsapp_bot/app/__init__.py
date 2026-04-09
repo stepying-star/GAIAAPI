@@ -1,1 +1,1 @@
-from .main import app
+"""Soon Hoe WhatsApp Bot"""

@@ -1,310 +1,280 @@
+"""
+Conversation Manager — state machine
+Stages: greeting → language_select → main_menu → enquiry → appointment → lead_capture → handoff
+"""
 import logging
-from app import database as db
-from app import whatsapp as wa
-from app import ai_engine as ai
+from .config import Config
+from .database import Database
+from .whatsapp import WhatsAppClient
+from .ai_engine import AIEngine
 
-log = logging.getLogger("conversation")
+logger = logging.getLogger(__name__)
 
-# ── Multilingual strings ───────────────────────────────────
-STRINGS = {
-    "en": {
-        "welcome": "👋 Welcome to *Soon Hoe Business Management*!\n\nI'm your AI assistant — here to help with immigration, company setup, education, professional services, and AI enterprise solutions (GAIAGenX).\n\nHow can I help you today?",
-        "main_menu": "What would you like help with?",
-        "menu_btn_imm": "🌏 Immigration & Residency",
-        "menu_btn_biz": "🏢 Business Setup",
-        "menu_btn_svc": "📋 Professional Services",
-        "menu_btn_ai":  "🤖 AI Services (GAIAGenX)",
-        "menu_btn_apt": "📅 Book Consultation",
-        "menu_btn_edu": "🎓 Education & Lifestyle",
-        "ask_name": "To better assist you, may I have your name? 😊",
-        "ask_phone": "Thank you, {name}! Could you share your contact number (with country code)?",
-        "lead_saved": "✅ Thank you, {name}! Our team will reach out to you at {phone} shortly.\n\nFor urgent enquiries: admin@soonhoe.com.sg\nWebsite: www.soonhoe.com.sg",
-        "consult_prompt": "Would you like to book a consultation with our team?",
-        "btn_yes": "Yes, please!",
-        "btn_no": "Maybe later",
-        "btn_more": "Learn more",
-        "back_menu": "Back to Menu",
-        "anything_else": "Is there anything else I can help you with?",
-        "timeout_reset": "Welcome back! How can I help you today?",
-        "fallback": "I'm not sure I understood that. Could you rephrase? Or type *menu* to see options.",
-    },
-    "zh": {
-        "welcome": "👋 欢迎来到*顺和商务管理*！\n\n我是您的AI助手，专为您解答移民规划、公司注册、教育留学、专业服务及AI企业落地（GAIAGenX）等方面的问题。\n\n请问有什么可以帮您？",
-        "main_menu": "请问您需要哪方面的帮助？",
-        "menu_btn_imm": "🌏 投资移民与居留",
-        "menu_btn_biz": "🏢 企业出海与注册",
-        "menu_btn_svc": "📋 专业财税服务",
-        "menu_btn_ai":  "🤖 AI服务（GAIAGenX）",
-        "menu_btn_apt": "📅 预约咨询",
-        "menu_btn_edu": "🎓 教育与生活服务",
-        "ask_name": "为了更好地为您服务，请问您的姓名是？😊",
-        "ask_phone": "谢谢，{name}！请问您的联系电话（含国家区号）是？",
-        "lead_saved": "✅ 感谢您，{name}！我们的团队将尽快通过 {phone} 与您联系。\n\n紧急咨询请发送邮件至：admin@soonhoe.com.sg\n官网：www.soonhoe.com.sg",
-        "consult_prompt": "您是否希望预约我们的专业顾问进行一对一咨询？",
-        "btn_yes": "好的，预约！",
-        "btn_no": "暂时不需要",
-        "btn_more": "了解更多",
-        "back_menu": "返回菜单",
-        "anything_else": "还有什么可以帮到您的吗？",
-        "timeout_reset": "欢迎回来！请问有什么可以帮您？",
-        "fallback": "抱歉，我没有理解您的意思。请重新描述，或输入*菜单*查看选项。",
-    },
-    "ms": {
-        "welcome": "👋 Selamat datang ke *Soon Hoe Business Management*!\n\nSaya ialah pembantu AI anda untuk pertanyaan tentang imigresen, penubuhan syarikat, pendidikan, perkhidmatan profesional dan penyelesaian AI (GAIAGenX).\n\nBagaimana saya boleh membantu anda?",
-        "main_menu": "Apakah yang anda perlukan bantuan?",
-        "menu_btn_imm": "🌏 Imigresen & Kediaman",
-        "menu_btn_biz": "🏢 Penubuhan Perniagaan",
-        "menu_btn_svc": "📋 Perkhidmatan Profesional",
-        "menu_btn_ai":  "🤖 Perkhidmatan AI (GAIAGenX)",
-        "menu_btn_apt": "📅 Tempah Perundingan",
-        "menu_btn_edu": "🎓 Pendidikan & Gaya Hidup",
-        "ask_name": "Untuk membantu anda dengan lebih baik, boleh saya tahu nama anda? 😊",
-        "ask_phone": "Terima kasih, {name}! Boleh kongsikan nombor telefon anda (dengan kod negara)?",
-        "lead_saved": "✅ Terima kasih, {name}! Pasukan kami akan menghubungi anda di {phone} tidak lama lagi.\n\nE-mel: admin@soonhoe.com.sg | Web: www.soonhoe.com.sg",
-        "consult_prompt": "Adakah anda ingin menempah perundingan dengan pasukan kami?",
-        "btn_yes": "Ya, tempah!", "btn_no": "Mungkin kemudian",
-        "btn_more": "Ketahui lebih lanjut", "back_menu": "Kembali ke Menu",
-        "anything_else": "Ada lagi yang boleh saya bantu?",
-        "timeout_reset": "Selamat kembali! Bagaimana saya boleh membantu anda?",
-        "fallback": "Maaf, saya tidak faham. Sila cuba lagi atau taip *menu*.",
-    },
-    "ja": {
-        "welcome": "👋 *Soon Hoe Business Management* へようこそ！\n\n私はAIアシスタントです。移民、会社設立、教育、専門サービス、AIソリューション（GAIAGenX）についてご質問にお答えします。\n\nどのようなご用件でしょうか？",
-        "main_menu": "どのようなお手伝いが必要ですか？",
-        "menu_btn_imm": "🌏 投資移民・居留権",
-        "menu_btn_biz": "🏢 海外法人設立",
-        "menu_btn_svc": "📋 専門サービス",
-        "menu_btn_ai":  "🤖 AIサービス（GAIAGenX）",
-        "menu_btn_apt": "📅 相談予約",
-        "menu_btn_edu": "🎓 教育・ライフスタイル",
-        "ask_name": "より良いサポートのため、お名前を教えていただけますか？😊",
-        "ask_phone": "ありがとう、{name}さん！連絡先電話番号（国番号付き）を教えてください。",
-        "lead_saved": "✅ ありがとう、{name}さん！担当者より {phone} にご連絡いたします。\n\nメール: admin@soonhoe.com.sg | Web: www.soonhoe.com.sg",
-        "consult_prompt": "担当者との個別相談をご予約されますか？",
-        "btn_yes": "はい、予約します", "btn_no": "後でまた",
-        "btn_more": "詳しく知る", "back_menu": "メニューへ戻る",
-        "anything_else": "他にご質問はありますか？",
-        "timeout_reset": "お帰りなさい！どのようなご用件でしょうか？",
-        "fallback": "申し訳ありません、理解できませんでした。*メニュー*と入力してオプションをご確認ください。",
-    },
-    "th": {
-        "welcome": "👋 ยินดีต้อนรับสู่ *Soon Hoe Business Management*!\n\nฉันคือผู้ช่วย AI ของคุณสำหรับคำถามเกี่ยวกับการย้ายถิ่น การตั้งบริษัท การศึกษา บริการวิชาชีพ และโซลูชัน AI (GAIAGenX)\n\nฉันจะช่วยคุณได้อย่างไร?",
-        "main_menu": "คุณต้องการความช่วยเหลือเรื่องอะไร?",
-        "menu_btn_imm": "🌏 วีซ่านักลงทุน & ถิ่นที่อยู่",
-        "menu_btn_biz": "🏢 จัดตั้งบริษัทต่างประเทศ",
-        "menu_btn_svc": "📋 บริการวิชาชีพ",
-        "menu_btn_ai":  "🤖 บริการ AI (GAIAGenX)",
-        "menu_btn_apt": "📅 นัดปรึกษา",
-        "menu_btn_edu": "🎓 การศึกษา & ไลฟ์สไตล์",
-        "ask_name": "เพื่อให้บริการคุณได้ดียิ่งขึ้น ขอทราบชื่อของคุณได้ไหมคะ? 😊",
-        "ask_phone": "ขอบคุณ {name}! ขอเบอร์โทรศัพท์ของคุณ (พร้อมรหัสประเทศ) ได้ไหม?",
-        "lead_saved": "✅ ขอบคุณ {name}! ทีมงานจะติดต่อคุณที่ {phone} เร็วๆ นี้\n\nอีเมล: admin@soonhoe.com.sg | เว็บ: www.soonhoe.com.sg",
-        "consult_prompt": "คุณต้องการนัดปรึกษากับทีมผู้เชี่ยวชาญของเราไหม?",
-        "btn_yes": "ใช่ นัดเลย!", "btn_no": "ไว้ทีหลัง",
-        "btn_more": "เรียนรู้เพิ่มเติม", "back_menu": "กลับเมนู",
-        "anything_else": "มีอะไรอื่นที่ฉันช่วยได้ไหม?",
-        "timeout_reset": "ยินดีต้อนรับกลับมา! ฉันจะช่วยคุณได้อย่างไร?",
-        "fallback": "ขอโทษ ฉันไม่เข้าใจ กรุณาลองอีกครั้ง หรือพิมพ์ *เมนู*",
-    },
-    "vi": {
-        "welcome": "👋 Chào mừng đến với *Soon Hoe Business Management*!\n\nTôi là trợ lý AI của bạn cho các câu hỏi về di trú, thành lập công ty, giáo dục, dịch vụ chuyên nghiệp và giải pháp AI (GAIAGenX).\n\nTôi có thể giúp gì cho bạn?",
-        "main_menu": "Bạn cần hỗ trợ về vấn đề gì?",
-        "menu_btn_imm": "🌏 Visa đầu tư & Cư trú",
-        "menu_btn_biz": "🏢 Thành lập doanh nghiệp",
-        "menu_btn_svc": "📋 Dịch vụ chuyên nghiệp",
-        "menu_btn_ai":  "🤖 Dịch vụ AI (GAIAGenX)",
-        "menu_btn_apt": "📅 Đặt lịch tư vấn",
-        "menu_btn_edu": "🎓 Giáo dục & Lối sống",
-        "ask_name": "Để hỗ trợ bạn tốt hơn, cho tôi biết tên của bạn nhé? 😊",
-        "ask_phone": "Cảm ơn, {name}! Bạn có thể cho tôi số điện thoại (kèm mã quốc gia) không?",
-        "lead_saved": "✅ Cảm ơn, {name}! Đội ngũ sẽ liên hệ bạn tại {phone} sớm nhất.\n\nEmail: admin@soonhoe.com.sg | Web: www.soonhoe.com.sg",
-        "consult_prompt": "Bạn có muốn đặt lịch tư vấn với đội ngũ chuyên gia không?",
-        "btn_yes": "Có, đặt lịch!", "btn_no": "Để sau",
-        "btn_more": "Tìm hiểu thêm", "back_menu": "Quay lại Menu",
-        "anything_else": "Còn điều gì tôi có thể giúp bạn không?",
-        "timeout_reset": "Chào mừng trở lại! Tôi có thể giúp gì cho bạn?",
-        "fallback": "Xin lỗi, tôi chưa hiểu ý bạn. Hãy thử lại hoặc gõ *menu*.",
-    },
-    "fil": {
-        "welcome": "👋 Maligayang pagdating sa *Soon Hoe Business Management*!\n\nAko ang inyong AI assistant para sa mga katanungan tungkol sa immigration, pagsasangkot ng negosyo, edukasyon, propesyonal na serbisyo, at AI (GAIAGenX).\n\nPaano kita matutulungan?",
-        "main_menu": "Ano ang kailangan mong tulong?",
-        "menu_btn_imm": "🌏 Immigration & Tirahan",
-        "menu_btn_biz": "🏢 Pagsasangkot ng Negosyo",
-        "menu_btn_svc": "📋 Propesyonal na Serbisyo",
-        "menu_btn_ai":  "🤖 Serbisyo ng AI (GAIAGenX)",
-        "menu_btn_apt": "📅 Mag-book ng Konsultasyon",
-        "menu_btn_edu": "🎓 Edukasyon & Pamumuhay",
-        "ask_name": "Para mas matulungan kita, pwede mo bang ibahagi ang iyong pangalan? 😊",
-        "ask_phone": "Salamat, {name}! Pwede mo bang ibahagi ang iyong numero (kasama ang country code)?",
-        "lead_saved": "✅ Salamat, {name}! Makikipag-ugnayan sa inyo ang aming koponan sa {phone}.\n\nEmail: admin@soonhoe.com.sg | Web: www.soonhoe.com.sg",
-        "consult_prompt": "Gusto mo bang mag-book ng konsultasyon sa aming koponan?",
-        "btn_yes": "Oo, i-book!", "btn_no": "Mamaya na",
-        "btn_more": "Alamin pa", "back_menu": "Bumalik sa Menu",
-        "anything_else": "May iba pa bang maitutulong ako?",
-        "timeout_reset": "Maligayang pagbabalik! Paano kita matutulungan?",
-        "fallback": "Pasensya na, hindi ko naintindihan. Subukan muli o i-type ang *menu*.",
-    },
+# ── Greeting messages ──────────────────────────────────────────────────────
+GREETINGS = {
+    "en":  "👋 Hello! I'm *Soo*, the AI assistant for *Soon Hoe Group* & *GAIAGenX*.\n\nI can help you with:\n• Immigration & PR applications 🏠\n• Company setup in Singapore 🏢\n• Education & real estate 📚\n• AI enterprise solutions 🤖\n• Accounting, tax & audit 📊\n\nHow can I help you today?",
+    "zh":  "👋 您好！我是*顺和集团*和*GAIAGenX*的AI助理*Soo*。\n\n我可以帮您：\n• 移民及PR申请 🏠\n• 新加坡公司注册 🏢\n• 教育及地产咨询 📚\n• AI企业解决方案 🤖\n• 会计、税务及审计 📊\n\n请问有什么可以帮您？",
+    "ms":  "👋 Hai! Saya *Soo*, pembantu AI untuk *Soon Hoe Group* & *GAIAGenX*.\n\nSaya boleh membantu anda:\n• Permohonan imigresen & PR 🏠\n• Penubuhan syarikat di Singapura 🏢\n• Pendidikan & hartanah 📚\n• Penyelesaian AI perusahaan 🤖\n• Perakaunan, cukai & audit 📊\n\nBagaimana saya boleh membantu anda hari ini?",
+    "ja":  "👋 こんにちは！私は*顺和グループ*と*GAIAGenX*のAIアシスタント*Soo*です。\n\nご相談内容：\n• 移民・PR申請 🏠\n• シンガポール会社設立 🏢\n• 教育・不動産 📚\n• AI企業ソリューション 🤖\n• 会計・税務・監査 📊\n\n本日はどのようなご用件でしょうか？",
+    "th":  "👋 สวัสดีครับ/ค่ะ! ผม/หนูชื่อ *Soo* ผู้ช่วย AI ของ *Soon Hoe Group* และ *GAIAGenX*\n\nช่วยคุณได้เรื่อง:\n• วีซ่าและ PR 🏠\n• จัดตั้งบริษัทในสิงคโปร์ 🏢\n• การศึกษาและอสังหาริมทรัพย์ 📚\n• โซลูชัน AI สำหรับองค์กร 🤖\n• บัญชี ภาษี และตรวจสอบ 📊\n\nวันนี้ต้องการความช่วยเหลืออะไรคะ/ครับ?",
+    "vi":  "👋 Xin chào! Tôi là *Soo*, trợ lý AI của *Soon Hoe Group* và *GAIAGenX*.\n\nTôi có thể giúp bạn:\n• Visa & PR Singapore 🏠\n• Thành lập công ty tại Singapore 🏢\n• Giáo dục & bất động sản 📚\n• Giải pháp AI doanh nghiệp 🤖\n• Kế toán, thuế & kiểm toán 📊\n\nHôm nay tôi có thể giúp gì cho bạn?",
+    "fil": "👋 Kamusta! Ako si *Soo*, ang AI assistant ng *Soon Hoe Group* at *GAIAGenX*.\n\nMatutulungan kita sa:\n• Immigration at PR applications 🏠\n• Pagtatayo ng kumpanya sa Singapore 🏢\n• Edukasyon at real estate 📚\n• AI enterprise solutions 🤖\n• Accounting, buwis at audit 📊\n\nPaano kita matutulungan ngayon?",
 }
 
-def S(lang, key, **kwargs):
-    """Get localised string"""
-    s = STRINGS.get(lang, STRINGS["en"]).get(key, STRINGS["en"].get(key, ""))
-    if kwargs: s = s.format(**kwargs)
-    return s
+HANDOFF_MSG = {
+    "en":  "I'll connect you with one of our consultants shortly. You can also reach us directly:\n📧 admin@soonhoe.com.sg\n🌐 www.soonhoe.com.sg\n\nOur team will be in touch within 1 business day. Thank you! 🙏",
+    "zh":  "我将为您转接人工顾问。您也可以直接联系我们：\n📧 admin@soonhoe.com.sg\n🌐 www.soonhoe.com.sg\n\n我们的团队将在1个工作日内与您联系。感谢！🙏",
+    "ms":  "Saya akan menghubungkan anda dengan salah seorang perunding kami. Anda juga boleh menghubungi kami terus:\n📧 admin@soonhoe.com.sg\n🌐 www.soonhoe.com.sg\n\nPasukan kami akan menghubungi anda dalam 1 hari perniagaan. Terima kasih! 🙏",
+    "ja":  "担当コンサルタントにおつなぎします。直接ご連絡もいただけます：\n📧 admin@soonhoe.com.sg\n🌐 www.soonhoe.com.sg\n\n1営業日以内にご連絡いたします。ありがとうございます！🙏",
+    "th":  "ฉันจะเชื่อมต่อคุณกับที่ปรึกษาของเรา คุณยังสามารถติดต่อเราโดยตรงได้ที่:\n📧 admin@soonhoe.com.sg\n🌐 www.soonhoe.com.sg\n\nทีมของเราจะติดต่อกลับภายใน 1 วันทำการ ขอบคุณ! 🙏",
+    "vi":  "Tôi sẽ kết nối bạn với chuyên viên tư vấn. Bạn cũng có thể liên hệ trực tiếp:\n📧 admin@soonhoe.com.sg\n🌐 www.soonhoe.com.sg\n\nĐội ngũ sẽ liên hệ trong vòng 1 ngày làm việc. Cảm ơn! 🙏",
+    "fil": "Ikikonekta kita sa aming consultant. Maaari ka ring makipag-ugnayan nang direkta:\n📧 admin@soonhoe.com.sg\n🌐 www.soonhoe.com.sg\n\nMakikipag-ugnayan ang aming team sa loob ng 1 araw ng trabaho. Salamat! 🙏",
+}
 
-def handle_message(incoming):
-    wa_id    = incoming["wa_id"]
-    msg_id   = incoming["msg_id"]
-    text     = incoming["text"].strip()
-    name     = incoming.get("name", "")
+APPT_CONFIRM = {
+    "en":  "✅ *Consultation Request Received!*\n\nDetails:\n• *Name:* {name}\n• *Interest:* {interest}\n• *Preferred time:* {time}\n• *Contact:* {contact}\n\nOur team will confirm your appointment within 1 business day.\n📧 admin@soonhoe.com.sg",
+    "zh":  "✅ *咨询预约已收到！*\n\n详情：\n• *姓名：* {name}\n• *咨询方向：* {interest}\n• *希望时间：* {time}\n• *联系方式：* {contact}\n\n我们的团队将在1个工作日内确认您的预约。\n📧 admin@soonhoe.com.sg",
+}
+for lang in ["ms","ja","th","vi","fil"]:
+    APPT_CONFIRM[lang] = APPT_CONFIRM["en"]
 
-    # Mark as read
-    wa.mark_read(msg_id)
+ASK_NAME = {
+    "en":"Great! Could you share your *name* so I can address you properly?",
+    "zh":"好的！请问您的*姓名*是？",
+    "ms":"Baik! Boleh kongsikan *nama* anda?",
+    "ja":"了解しました。お*名前*を教えていただけますか？",
+    "th":"ได้เลย! ขอทราบ*ชื่อ*ของคุณด้วยนะคะ/ครับ",
+    "vi":"Tuyệt! Bạn có thể cho tôi biết *tên* của bạn không?",
+    "fil":"Sige! Maari bang ibahagi ang iyong *pangalan*?",
+}
+ASK_TIME = {
+    "en":"What's your *preferred date and time* for the consultation? (e.g. Tuesday 3pm SGT)\nOur hours: Mon–Fri 9am–6pm SGT",
+    "zh":"您希望什么*时间*进行咨询？（例如：周二下午3点 SGT）\n办公时间：周一至周五 9am–6pm SGT",
+    "ms":"Apakah *tarikh dan masa* yang sesuai untuk anda? (cth: Selasa 3ptg SGT)\nWaktu pejabat: Isnin–Jumaat 9pg–6ptg SGT",
+    "ja":"ご都合のよい*日時*を教えてください（例：火曜 午後3時 SGT）\n営業時間：月〜金 9am–6pm SGT",
+    "th":"คุณสะดวก*วันและเวลา*ใดสำหรับการนัดหมาย? (เช่น อังคาร 15:00 SGT)\nเวลาทำการ: จันทร์–ศุกร์ 9:00–18:00 SGT",
+    "vi":"*Ngày và giờ* nào phù hợp với bạn? (vd: Thứ Ba 3 giờ chiều SGT)\nGiờ làm việc: T2–T6 9am–6pm SGT",
+    "fil":"Anong *petsa at oras* ang maginhawa para sa iyo? (hal: Martes 3pm SGT)\nOras ng trabaho: Lunes–Biyernes 9am–6pm SGT",
+}
+ASK_CONTACT = {
+    "en":"And your *email address* for confirmation?",
+    "zh":"请提供您的*电邮地址*以便确认预约。",
+    "ms":"Dan *alamat emel* anda untuk pengesahan?",
+    "ja":"確認のため*メールアドレス*を教えてください。",
+    "th":"*อีเมล*ของคุณสำหรับยืนยันการนัดหมาย?",
+    "vi":"*Email* của bạn để xác nhận?",
+    "fil":"At ang iyong *email address* para sa kumpirmasyon?",
+}
 
-    # Log inbound
-    db.add_message(wa_id, "in", text)
 
-    # Get current state
-    conv = db.get_conv(wa_id)
-    lang  = conv["lang"] if conv else "en"
-    stage = conv["stage"] if conv else "new"
-    sess  = db.get_session(wa_id)
+class ConversationManager:
+    def __init__(self, cfg: Config, db: Database, wa: WhatsAppClient):
+        self.cfg = cfg
+        self.db  = db
+        self.wa  = wa
+        self.ai  = AIEngine(cfg)
 
-    # Auto-detect language from first message if still en
-    if stage == "new" or (lang == "en" and len(text) > 3):
-        detected = ai.detect_language(text)
-        if detected != "en":
-            lang = detected
-            db.set_lang(wa_id, lang)
+    def handle(self, msg: dict, contact: dict):
+        """Main entry point for incoming message"""
+        msg_type = msg.get("type", "")
+        phone    = msg.get("from", "")
+        name     = contact.get("profile", {}).get("name", "")
 
-    # Save name from WhatsApp profile if not yet stored
-    if name and not sess.get("name"):
-        sess["name"] = name
-        db.set_session(wa_id, sess)
-
-    # ── Keyword shortcuts ──────────────────────────────────
-    text_lower = text.lower()
-    if text_lower in ("menu", "菜单", "メニュー", "เมนู", "menu.", "hi", "hello", "helo", "start", "/start"):
-        return _send_main_menu(wa_id, lang)
-
-    # ── Stage machine ──────────────────────────────────────
-    if stage == "new":
-        db.upsert_conv(wa_id, stage="chatting", lang=lang)
-        _send(wa_id, S(lang, "welcome"))
-        return _send_main_menu(wa_id, lang)
-
-    elif stage == "await_name":
-        if len(text) >= 2:
-            sess["name"] = text
-            db.set_session(wa_id, sess)
-            db.set_stage(wa_id, "await_phone")
-            _send(wa_id, S(lang, "ask_phone", name=text))
-            db.upsert_lead(wa_id, name=text, lang=lang, interest=sess.get("interest", "general"))
+        # Extract text content
+        if msg_type == "text":
+            text = msg["text"]["body"].strip()
+        elif msg_type == "interactive":
+            inter = msg.get("interactive", {})
+            if inter.get("type") == "button_reply":
+                text = inter["button_reply"]["id"]
+            elif inter.get("type") == "list_reply":
+                text = inter["list_reply"]["id"]
+            else:
+                text = ""
         else:
-            _send(wa_id, S(lang, "ask_name"))
+            # Audio, image, etc — acknowledge
+            self.wa.send_text(phone, "📎 I can only process text messages for now. Please type your question!")
+            return
 
-    elif stage == "await_phone":
-        if len(text) >= 7:
-            sess["phone"] = text
-            n = sess.get("name", "")
-            db.set_session(wa_id, sess)
-            db.set_stage(wa_id, "chatting")
-            db.upsert_lead(wa_id, phone=text, status="captured")
-            _send(wa_id, S(lang, "lead_saved", name=n, phone=text))
-            # Notify staff
-            _notify_staff(wa_id, n, text, lang, sess.get("interest", ""))
+        if not text or not phone:
+            return
+
+        logger.info(f"MSG from {phone}: {text[:80]}")
+
+        # Save incoming message
+        self.db.add_message(phone, "in", text)
+
+        # Get or create conversation
+        conv = self.db.get_conversation(phone)
+        stage = conv.get("stage", "greeting")
+
+        # Session timeout → reset
+        if conv and self.db.is_session_expired(phone, self.cfg.SESSION_TIMEOUT):
+            logger.info(f"Session expired for {phone}, resetting")
+            self.db.set_stage(phone, "greeting")
+            self.db.clear_history(phone)
+            stage = "greeting"
+
+        # Detect or use stored language
+        if not conv.get("language"):
+            lang = self.ai.detect_language(text)
+            self.db.upsert_conversation(phone, name=name, language=lang)
         else:
-            _send(wa_id, S(lang, "ask_phone", name=sess.get("name", "")))
+            lang = conv.get("language", "en")
 
-    elif text.startswith("btn_"):
-        _handle_button(wa_id, text, lang, sess)
+        # Store name if we have it
+        if name and not conv.get("name"):
+            self.db.upsert_conversation(phone, name=name)
 
-    else:
-        # AI conversation
-        history = db.get_history(wa_id, limit=8)
-        response = ai.get_ai_response(wa_id, text, history)
-        if response:
-            _send(wa_id, response)
-            db.add_message(wa_id, "out", response)
-            # After a few exchanges, offer lead capture
-            msg_count = len(history)
-            if msg_count >= 3 and not sess.get("lead_offered"):
-                sess["lead_offered"] = True
-                db.set_session(wa_id, sess)
-                wa.send_buttons(wa_id, S(lang, "consult_prompt"), [
-                    {"id": "btn_book_consult", "title": S(lang, "btn_yes")[:20]},
-                    {"id": "btn_no_thanks",    "title": S(lang, "btn_no")[:20]},
-                ])
+        # ── Dispatch to stage handler ──────────────────────────────────────
+        handler = {
+            "greeting":     self._handle_greeting,
+            "main_menu":    self._handle_ai,
+            "enquiry":      self._handle_ai,
+            "appointment_interest": self._handle_appt_interest,
+            "appointment_name":     self._handle_appt_name,
+            "appointment_time":     self._handle_appt_time,
+            "appointment_contact":  self._handle_appt_contact,
+            "handoff":      self._handle_handoff,
+        }.get(stage, self._handle_ai)
 
-def _handle_button(wa_id, btn_id, lang, sess):
-    topic_map = {
-        "btn_immigration":  ("immigration", "🌏"),
-        "btn_business":     ("business",    "🏢"),
-        "btn_services":     ("services",    "📋"),
-        "btn_ai":           ("gaiagenx",    "🤖"),
-        "btn_education":    ("education",   "🎓"),
-    }
-    if btn_id == "btn_book_consult":
-        if sess.get("name"):
-            db.set_stage(wa_id, "await_phone")
-            _send(wa_id, S(lang, "ask_phone", name=sess["name"]))
+        handler(phone, text, lang, name)
+
+    # ── Stage handlers ────────────────────────────────────────────────────
+    def _handle_greeting(self, phone, text, lang, name):
+        greeting = GREETINGS.get(lang, GREETINGS["en"])
+        if name:
+            greeting = greeting.replace("Hello!", f"Hello, {name}!").replace("您好！", f"您好，{name}！")
+        self._send(phone, greeting)
+        self.db.set_stage(phone, "enquiry")
+        # Record lead
+        self.db.upsert_lead(phone, name=name, language=lang, stage="contacted")
+
+    def _handle_ai(self, phone, text, lang, name):
+        # Check for appointment intent
+        intent = self.ai.detect_intent(text)
+
+        if intent == "appointment":
+            self.db.set_stage(phone, "appointment_interest")
+            self._handle_appt_interest(phone, text, lang, name)
+            return
+
+        if intent == "handoff":
+            self.db.set_stage(phone, "handoff")
+            self._handle_handoff(phone, text, lang, name)
+            return
+
+        # Regular AI enquiry
+        history = self.db.get_history(phone)
+        session = self.db.get_session_data(phone)
+        reply   = self.ai.generate_reply(text, history, lang, session)
+        self._send(phone, reply)
+        self.db.upsert_lead(phone, interest=text[:100], stage="enquiring")
+
+    def _handle_appt_interest(self, phone, text, lang, name):
+        """Ask which service area they want to consult about"""
+        self.wa.send_buttons(
+            phone,
+            body={
+                "en": "Which service would you like to book a consultation for?",
+                "zh": "您希望咨询哪方面的服务？",
+                "ms": "Perkhidmatan mana yang anda ingin buat temujanji?",
+                "ja": "どのサービスについてご相談されますか？",
+                "th": "คุณต้องการนัดหมายเรื่องบริการใด?",
+                "vi": "Bạn muốn đặt lịch tư vấn về dịch vụ nào?",
+                "fil": "Anong serbisyo ang gusto mong i-konsulta?",
+            }.get(lang, "Which service would you like to book a consultation for?"),
+            buttons=[
+                {"id": "appt_immigration", "title": "🏠 Immigration/PR"},
+                {"id": "appt_business",    "title": "🏢 Business Setup"},
+                {"id": "appt_other",       "title": "📋 Other Services"},
+            ]
+        )
+        self.db.set_stage(phone, "appointment_name")
+
+    def _handle_appt_name(self, phone, text, lang, name):
+        # Save their interest selection if it's a button reply
+        if text.startswith("appt_"):
+            interest_map = {
+                "appt_immigration": "Immigration & PR",
+                "appt_business":    "Business Setup",
+                "appt_other":       "Other Services"
+            }
+            interest = interest_map.get(text, "General")
+            session = self.db.get_session_data(phone)
+            session["appt_interest"] = interest
+            self.db.set_session_data(phone, session)
+
+        # Ask for name
+        if name:
+            # We already have the name
+            session = self.db.get_session_data(phone)
+            session["appt_name"] = name
+            self.db.set_session_data(phone, session)
+            ask = ASK_TIME.get(lang, ASK_TIME["en"])
+            self._send(phone, ask)
+            self.db.set_stage(phone, "appointment_time")
         else:
-            db.set_stage(wa_id, "await_name")
-            _send(wa_id, S(lang, "ask_name"))
+            ask = ASK_NAME.get(lang, ASK_NAME["en"])
+            self._send(phone, ask)
 
-    elif btn_id == "btn_no_thanks":
-        _send(wa_id, S(lang, "anything_else"))
+    def _handle_appt_time(self, phone, text, lang, name):
+        # Save name if this is the name reply
+        conv = self.db.get_conversation(phone)
+        session = self.db.get_session_data(phone)
 
-    elif btn_id == "btn_capture_lead":
-        db.set_stage(wa_id, "await_name")
-        _send(wa_id, S(lang, "ask_name"))
+        if "appt_name" not in session:
+            session["appt_name"] = text
+            self.db.set_session_data(phone, session)
+            ask = ASK_TIME.get(lang, ASK_TIME["en"])
+            self._send(phone, ask)
+            return
 
-    elif btn_id in topic_map:
-        topic, emoji = topic_map[btn_id]
-        sess["interest"] = topic
-        db.set_session(wa_id, sess)
-        db.set_stage(wa_id, "chatting")
-        # Let AI handle the topic introduction
-        history = db.get_history(wa_id, limit=4)
-        prompt = f"The customer has selected: {topic}. Give a helpful overview of Soon Hoe services in this area and ask what specific help they need. Be concise and WhatsApp-friendly."
-        response = ai.get_ai_response(wa_id, prompt, history)
-        if response:
-            _send(wa_id, response)
-            db.add_message(wa_id, "out", response)
-    else:
-        _send_main_menu(wa_id, lang)
+        # Save preferred time
+        session["appt_time"] = text
+        self.db.set_session_data(phone, session)
+        ask = ASK_CONTACT.get(lang, ASK_CONTACT["en"])
+        self._send(phone, ask)
+        self.db.set_stage(phone, "appointment_contact")
 
-def _send_main_menu(wa_id, lang):
-    db.set_stage(wa_id, "chatting")
-    # WhatsApp interactive list
-    wa.send_list(
-        wa_id,
-        S(lang, "main_menu"),
-        "📋 Menu" if lang == "en" else "📋 选项" if lang == "zh" else "📋 Options",
-        [{"title": "🌟 Our Services", "rows": [
-            {"id": "btn_immigration", "title": S(lang, "menu_btn_imm")[:24], "description": "Singapore PR, GIP, MM2H, Family Office"},
-            {"id": "btn_business",   "title": S(lang, "menu_btn_biz")[:24], "description": "Company setup, EP/DP, HR, Legal"},
-            {"id": "btn_services",   "title": S(lang, "menu_btn_svc")[:24], "description": "Accounting, Audit, Tax, Secretarial"},
-            {"id": "btn_ai",         "title": S(lang, "menu_btn_ai")[:24],  "description": "AI Agents, Automation, Analytics"},
-            {"id": "btn_education",  "title": S(lang, "menu_btn_edu")[:24], "description": "Study abroad, Real estate, Concierge"},
-            {"id": "btn_book_consult","title": S(lang, "menu_btn_apt")[:24],"description": "Talk to our expert team"},
-        ]}]
-    )
+    def _handle_appt_contact(self, phone, text, lang, name):
+        session = self.db.get_session_data(phone)
+        session["appt_contact"] = text
+        self.db.set_session_data(phone, session)
 
-def _send(wa_id, text):
-    wa.send_text(wa_id, text)
-    db.add_message(wa_id, "out", text)
+        # Confirm booking
+        appt_name    = session.get("appt_name", name or "")
+        appt_interest = session.get("appt_interest", "General Consultation")
+        appt_time    = session.get("appt_time", "TBD")
+        appt_contact = session.get("appt_contact", text)
 
-def _notify_staff(wa_id, name, phone, lang, interest):
-    """Send lead alert to staff WhatsApp"""
-    from app.config import config
-    if not config.NOTIFY_WHATSAPP:
-        return
-    msg = (f"🔔 *New Lead Captured*\n\n"
-           f"👤 Name: {name}\n"
-           f"📱 Phone: {phone}\n"
-           f"💬 WA ID: {wa_id}\n"
-           f"🌐 Language: {lang}\n"
-           f"📌 Interest: {interest}\n"
-           f"⏰ Time: {__import__('datetime').datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}")
-    wa.send_text(config.NOTIFY_WHATSAPP, msg)
+        tmpl = APPT_CONFIRM.get(lang, APPT_CONFIRM["en"])
+        confirm = tmpl.format(
+            name=appt_name, interest=appt_interest,
+            time=appt_time, contact=appt_contact
+        )
+        self._send(phone, confirm)
+
+        # Save to leads DB
+        self.db.upsert_lead(phone,
+            name=appt_name, language=lang,
+            interest=appt_interest,
+            notes=f"Appt: {appt_time} | Contact: {appt_contact}",
+            stage="appointment_booked"
+        )
+
+        # Reset to main
+        self.db.set_stage(phone, "enquiry")
+        self.db.set_session_data(phone, {})
+
+    def _handle_handoff(self, phone, text, lang, name):
+        msg = HANDOFF_MSG.get(lang, HANDOFF_MSG["en"])
+        self._send(phone, msg)
+        self.db.upsert_lead(phone, stage="handoff_requested")
+        self.db.set_stage(phone, "enquiry")
+
+    def _send(self, phone: str, text: str):
+        result = self.wa.send_text(phone, text)
+        self.db.add_message(phone, "out", text)
+        if "error" in result:
+            logger.error(f"Send failed to {phone}: {result}")

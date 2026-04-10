@@ -1,1 +1,0 @@
-"""Soon Hoe WhatsApp Bot"""

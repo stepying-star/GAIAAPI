@@ -11,7 +11,7 @@ export function FAQSection() {
   const faqs = language === 'zh' ? [
     {
       question: 'GAIAAPI、GAIA词元、GAIA API MART 是什么关系？',
-      answer: 'GAIAAPI 是统一产品名与主域名。GAIA词元 是中文市场品牌，强调模型调用、成本控制与本地化；GAIA API MART 是英文国际化品牌，强调统一接入、模型聚合与开发者友好体验。三者指向同一个产品。'
+      answer: 'GAIAAPI是品牌英文名称(国际化品牌标识), GAIA词元是品牌中文名称(中国市场品牌标识), GAIA API MART是本平台的产品名称统一聚合多家AI模型提供开发者友好的API调用服务'
     },
     {
       question: '是否兼容 OpenAI 风格接口？',
@@ -36,7 +36,7 @@ export function FAQSection() {
   ] : [
     {
       question: 'What is the relationship between GAIAAPI, GAIA词元, and GAIA API MART?',
-      answer: 'GAIAAPI is the unified product name and main domain. GAIA词元 is our Chinese market brand; GAIA API MART is our international brand. All three refer to the same product.'
+      answer: 'GAIAAPI is our English brand name (international identity), GAIA词元 is our Chinese brand name (Chinese market identity), and GAIA API MART is our product name — a unified platform aggregating AI models to provide developer-friendly API services.'
     },
     {
       question: 'Is it compatible with OpenAI-style APIs?',

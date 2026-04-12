@@ -79,7 +79,7 @@ export function HeroSection() {
                 <code>{`from openai import OpenAI
 
 client = OpenAI(
-  base_url="https://api.gaiaapi.com/v1",
+  base_url="https://api.gaiagenx.com/v1",
   api_key="YOUR_API_KEY"
 )
 

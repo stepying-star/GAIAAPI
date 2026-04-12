@@ -102,7 +102,7 @@ export function ChatBot() {
 
     if (lang === 'zh') {
       if (lowerMsg.includes('开始') || lowerMsg.includes('接入') || lowerMsg.includes('api key') || lowerMsg.includes('注册')) {
-        return "注册账号后即可在控制台获取 API Key。\n\n接口完全兼容 OpenAI 格式，只需替换 base_url 为 https://api.gaiaapi.com/v1，5 分钟内完成接入 ✅\n\n👉 需要我帮你生成示例代码吗？";
+        return "注册账号后即可在控制台获取 API Key。\n\n接口完全兼容 OpenAI 格式，只需替换 base_url 为 https://api.gaiagenx.com/v1，5 分钟内完成接入 ✅\n\n👉 需要我帮你生成示例代码吗？";
       }
       if (lowerMsg.includes('模型') || lowerMsg.includes('支持') || lowerMsg.includes('gpt') || lowerMsg.includes('claude') || lowerMsg.includes('gemini')) {
         return "目前覆盖主流供应商：\n\n• GPT-4 / GPT-4o（OpenAI）\n• Claude 3.5 Sonnet（Anthropic）\n• Gemini 1.5 Pro（Google）\n• Qwen / Doubao / DeepSeek\n\n文本、图像、音频、视频全支持 🎯";
@@ -119,7 +119,7 @@ export function ChatBot() {
       return "感谢你的提问！这个问题我需要转给专业团队处理。\n\n请发邮件至 support@gaiaapi.com，或点击下方「预约演示」，我们会尽快回复你 📬";
     } else {
       if (lowerMsg.includes('start') || lowerMsg.includes('api key') || lowerMsg.includes('integrate') || lowerMsg.includes('sign up')) {
-        return "After signing up, grab your API Key from the dashboard.\n\nFully OpenAI-compatible — just replace base_url with https://api.gaiaapi.com/v1. You'll be integrated in under 5 minutes ✅\n\nWant me to show you a quick code sample?";
+        return "After signing up, grab your API Key from the dashboard.\n\nFully OpenAI-compatible — just replace base_url with https://api.gaiagenx.com/v1. You'll be integrated in under 5 minutes ✅\n\nWant me to show you a quick code sample?";
       }
       if (lowerMsg.includes('model') || lowerMsg.includes('support') || lowerMsg.includes('gpt') || lowerMsg.includes('claude') || lowerMsg.includes('gemini')) {
         return "We support all major providers:\n\n• GPT-4 / GPT-4o (OpenAI)\n• Claude 3.5 Sonnet (Anthropic)\n• Gemini 1.5 Pro (Google)\n• Qwen / Doubao / DeepSeek\n\nText, image, audio & video — all covered 🎯";

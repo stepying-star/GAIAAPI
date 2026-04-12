@@ -22,6 +22,9 @@ const translations = {
     'nav.console': '控制台',
     'nav.login': '登录',
 
+    // Console
+    'console.description': '管理您的 API 密钥、查看使用情况并配置您的账户设置',
+
     // Brand
     'brand.name': 'GAIA词元',
     'brand.tagline': '统一接入多模型的 AI 接口平台',
@@ -136,6 +139,9 @@ const translations = {
     'nav.about': 'About',
     'nav.console': 'Console',
     'nav.login': 'Login',
+
+    // Console
+    'console.description': 'Manage your API keys, view usage statistics, and configure your account settings',
 
     // Brand
     'brand.name': 'GAIA API MART',

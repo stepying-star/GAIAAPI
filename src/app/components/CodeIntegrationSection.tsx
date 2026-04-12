@@ -13,7 +13,7 @@ export function CodeIntegrationSection() {
     python: `from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://api.gaiaapi.com/v1",
+    base_url="https://api.gaiagenx.com/v1",
     api_key="YOUR_API_KEY"
 )
 
@@ -29,7 +29,7 @@ print(response.choices[0].message.content)`,
     nodejs: `import OpenAI from 'openai';
 
 const client = new OpenAI({
-  baseURL: 'https://api.gaiaapi.com/v1',
+  baseURL: 'https://api.gaiagenx.com/v1',
   apiKey: 'YOUR_API_KEY',
 });
 
@@ -42,7 +42,7 @@ const response = await client.chat.completions.create({
 
 console.log(response.choices[0].message.content);`,
 
-    curl: `curl https://api.gaiaapi.com/v1/chat/completions \\
+    curl: `curl https://api.gaiagenx.com/v1/chat/completions \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -d '{

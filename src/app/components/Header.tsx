@@ -32,7 +32,12 @@ const LogoIcon = () => (
   </svg>
 );
 
-export function Header() {
+interface HeaderProps {
+  onNavigateToConsole: () => void;
+  onNavigateToHome: () => void;
+}
+
+export function Header({ onNavigateToConsole, onNavigateToHome }: HeaderProps) {
   const { language, toggleLanguage, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -51,12 +56,12 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
+            <button onClick={onNavigateToHome} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
               <LogoIcon />
               <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 GAIAAPI
               </div>
-            </div>
+            </button>
             <div className="hidden sm:block text-sm text-gray-400">
               {t('brand.name')}
             </div>
@@ -68,6 +73,7 @@ export function Header() {
               <a
                 key={item.key}
                 href={item.href}
+                onClick={onNavigateToHome}
                 className="text-sm text-gray-300 hover:text-white transition-colors"
               >
                 {t(item.key)}
@@ -87,12 +93,12 @@ export function Header() {
             </button>
 
             {/* Console Button */}
-            <a
-              href="#console"
+            <button
+              onClick={onNavigateToConsole}
               className="hidden sm:inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity"
             >
               {t('nav.console')}
-            </a>
+            </button>
 
             {/* Mobile Menu Toggle */}
             <button
@@ -113,18 +119,23 @@ export function Header() {
                   key={item.key}
                   href={item.href}
                   className="text-sm text-gray-300 hover:text-white transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={() => {
+                    onNavigateToHome();
+                    setMobileMenuOpen(false);
+                  }}
                 >
                   {t(item.key)}
                 </a>
               ))}
-              <a
-                href="#console"
-                className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
+              <button
+                onClick={() => {
+                  onNavigateToConsole();
+                  setMobileMenuOpen(false);
+                }}
+                className="text-sm text-blue-400 hover:text-blue-300 transition-colors text-left"
               >
                 {t('nav.console')}
-              </a>
+              </button>
             </nav>
           </div>
         )}

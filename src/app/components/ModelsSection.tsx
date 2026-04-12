@@ -3,7 +3,7 @@ import { MessageSquare, Image, Video, Mic, Database, ArrowRight } from 'lucide-r
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export function ModelsSection() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { ref, isVisible } = useScrollReveal();
 
   const modelCategories = [
@@ -15,9 +15,18 @@ export function ModelsSection() {
   ];
 
   const popularModels = [
-    'GPT-4', 'Claude 3.5', 'Gemini Pro', 'Llama 3',
-    'DALL-E 3', 'Midjourney', 'Stable Diffusion', 'Flux',
-    'Whisper', 'ElevenLabs', 'Suno', 'MusicGen'
+    { name: 'GPT-4o Image', price: 450, unit: language === 'zh' ? '点/次' : 'pts/call' },
+    { name: 'Kling 3.0', price: 1200, unit: language === 'zh' ? '点/次' : 'pts/call' },
+    { name: 'Sora 2 Pro', price: 2400, unit: language === 'zh' ? '点/次' : 'pts/call' },
+    { name: 'AI Music Gen', price: 180, unit: language === 'zh' ? '点/次' : 'pts/call' },
+    { name: 'GPT-4', price: null },
+    { name: 'Claude 3.5', price: null },
+    { name: 'Gemini Pro', price: null },
+    { name: 'Llama 3', price: null },
+    { name: 'DALL-E 3', price: null },
+    { name: 'Midjourney', price: null },
+    { name: 'Whisper', price: null },
+    { name: 'ElevenLabs', price: null }
   ];
 
   return (
@@ -63,9 +72,14 @@ export function ModelsSection() {
             {popularModels.map((model, index) => (
               <span
                 key={index}
-                className="px-4 py-2 bg-white/5 border border-white/20 rounded-lg text-sm text-gray-300 hover:bg-white/10 hover:border-white/30 transition-all cursor-pointer"
+                className="relative px-4 py-2 bg-white/5 border border-white/20 rounded-lg text-sm text-gray-300 hover:bg-white/10 hover:border-white/30 transition-all cursor-pointer"
               >
-                {model}
+                {model.name}
+                {model.price && (
+                  <span className="ml-2 px-2 py-0.5 bg-purple-500/20 text-purple-300 text-xs rounded">
+                    {model.price}{model.unit}
+                  </span>
+                )}
               </span>
             ))}
           </div>

@@ -60,21 +60,22 @@ console.log(response.choices[0].message.content);`,
   };
 
   return (
-    <section ref={ref} className="py-24 bg-gradient-to-b from-black via-gray-900 to-black">
+    <section ref={ref} className="py-12 md:py-16 lg:py-24 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-900 dark:to-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`text-center mb-16 transition-all duration-600 ${isVisible ? 'animate-[fadeInUp_0.6s_ease-out_both]' : 'opacity-0'}`}>
-          <h2 className="text-4xl font-bold text-white mb-4">
+        <div className={`text-center mb-8 md:mb-12 lg:mb-16 transition-all duration-600 ${isVisible ? 'animate-[fadeInUp_0.6s_ease-out_both]' : 'opacity-0'}`}>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             {t('code.title')}
           </h2>
-          <p className="text-xl text-gray-400">
+          <p className="text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-400">
             {t('code.subtitle')}
           </p>
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gray-900/50 backdrop-blur border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+          {/* Code block stays dark in both modes */}
+          <div className="bg-gray-900 backdrop-blur border border-gray-700 rounded-xl md:rounded-2xl overflow-hidden shadow-2xl">
             {/* Tabs */}
-            <div className="flex items-center gap-4 px-6 py-4 bg-black/30 border-b border-white/10">
+            <div className="flex items-center gap-2 md:gap-4 px-4 md:px-6 py-3 md:py-4 bg-black/30 border-b border-white/10">
               {[
                 { id: 'python', label: 'Python' },
                 { id: 'nodejs', label: 'Node.js' },
@@ -83,7 +84,7 @@ console.log(response.choices[0].message.content);`,
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2 rounded-lg text-sm transition-all ${
+                  className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm transition-all ${
                     activeTab === tab.id
                       ? 'bg-white/10 text-white'
                       : 'text-gray-400 hover:text-white'
@@ -95,32 +96,32 @@ console.log(response.choices[0].message.content);`,
 
               <button
                 onClick={handleCopy}
-                className="ml-auto flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white transition-colors"
+                className="ml-auto flex items-center gap-2 px-2 md:px-3 py-1.5 md:py-2 text-xs md:text-sm text-gray-400 hover:text-white transition-colors"
               >
                 {copied ? (
                   <>
                     <Check className="w-4 h-4" />
-                    Copied!
+                    <span className="hidden sm:inline">Copied!</span>
                   </>
                 ) : (
                   <>
                     <Copy className="w-4 h-4" />
-                    Copy
+                    <span className="hidden sm:inline">Copy</span>
                   </>
                 )}
               </button>
             </div>
 
-            {/* Code */}
-            <div className="p-6">
-              <pre className="text-sm text-gray-300 overflow-x-auto">
+            {/* Code - always dark */}
+            <div className="p-4 md:p-6">
+              <pre className="text-xs md:text-sm text-gray-300 overflow-x-auto">
                 <code>{codeExamples[activeTab as keyof typeof codeExamples]}</code>
               </pre>
             </div>
           </div>
 
           {/* Highlights */}
-          <div className="grid md:grid-cols-3 gap-4 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mt-6 md:mt-8">
             {[
               { icon: '✓', text: 'OpenAI Compatible' },
               { icon: '⚡', text: 'Just change base_url' },
@@ -128,10 +129,10 @@ console.log(response.choices[0].message.content);`,
             ].map((item, index) => (
               <div
                 key={index}
-                className="flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-lg"
+                className="flex items-center gap-3 px-4 py-3 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg"
               >
-                <span className="text-2xl">{item.icon}</span>
-                <span className="text-sm text-gray-300">{item.text}</span>
+                <span className="text-xl md:text-2xl">{item.icon}</span>
+                <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300">{item.text}</span>
               </div>
             ))}
           </div>

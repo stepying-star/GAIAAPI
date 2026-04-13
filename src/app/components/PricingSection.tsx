@@ -63,35 +63,35 @@ export function PricingSection() {
   ];
 
   return (
-    <section id="pricing" ref={ref} className="py-24 bg-gradient-to-b from-black via-gray-900 to-black">
+    <section id="pricing" ref={ref} className="py-12 md:py-16 lg:py-24 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-900 dark:to-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className={`text-center mb-12 transition-all duration-600 ${isVisible ? 'animate-[fadeInUp_0.6s_ease-out_both]' : 'opacity-0'}`}>
-          <h2 className="text-4xl font-bold text-white mb-4">
+        <div className={`text-center mb-8 md:mb-12 transition-all duration-600 ${isVisible ? 'animate-[fadeInUp_0.6s_ease-out_both]' : 'opacity-0'}`}>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             {language === 'zh' ? '简单透明的定价' : 'Simple, Transparent Pricing'}
           </h2>
-          <p className="text-xl text-gray-400 mb-8">
+          <p className="text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-400 mb-6 md:mb-8">
             {language === 'zh' ? '按点数消耗计费，订阅套餐+按需充值，灵活可控' : 'Pay per credit usage, subscription + top-up, flexible control'}
           </p>
 
           {/* Billing Toggle */}
-          <div className="inline-flex items-center gap-3 bg-gray-800/50 border border-white/10 rounded-lg p-1">
+          <div className="inline-flex items-center gap-2 md:gap-3 bg-gray-200 dark:bg-gray-800/50 border border-gray-300 dark:border-white/10 rounded-lg p-1">
             <button
               onClick={() => setBillingCycle('monthly')}
-              className={`px-6 py-2 rounded-md text-sm transition-all ${
-                billingCycle === 'monthly' ? 'bg-white/10 text-white' : 'text-gray-400'
+              className={`px-4 md:px-6 py-2 rounded-md text-xs md:text-sm transition-all ${
+                billingCycle === 'monthly' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-400'
               }`}
             >
               {language === 'zh' ? '按月付费' : 'Monthly'}
             </button>
             <button
               onClick={() => setBillingCycle('yearly')}
-              className={`px-6 py-2 rounded-md text-sm transition-all ${
-                billingCycle === 'yearly' ? 'bg-white/10 text-white' : 'text-gray-400'
+              className={`px-4 md:px-6 py-2 rounded-md text-xs md:text-sm transition-all ${
+                billingCycle === 'yearly' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-400'
               }`}
             >
               {language === 'zh' ? '按年付费' : 'Yearly'}
-              <span className="ml-2 text-xs text-purple-400">
+              <span className="ml-2 text-xs text-purple-500 dark:text-purple-400">
                 {language === 'zh' ? '年付8折' : '20% off'}
               </span>
             </button>
@@ -99,12 +99,12 @@ export function PricingSection() {
         </div>
 
         {/* Plan Cards */}
-        <div className="grid md:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12 lg:mb-16">
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative bg-gray-900/50 backdrop-blur border rounded-2xl p-6 transition-all hover:scale-105 ${
-                plan.highlighted ? 'border-purple-500 shadow-2xl shadow-purple-500/20' : 'border-white/10'
+              className={`relative bg-gray-100 dark:bg-gray-900/50 backdrop-blur border rounded-2xl p-5 md:p-6 transition-all hover:scale-105 ${
+                plan.highlighted ? 'border-purple-500 shadow-2xl shadow-purple-500/20' : 'border-gray-200 dark:border-white/10'
               }`}
             >
               {plan.badge && (
@@ -113,17 +113,17 @@ export function PricingSection() {
                 </div>
               )}
               <div className="text-center mb-6">
-                <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
+                <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-2">{plan.name}</h3>
                 <div className="mb-2">
-                  <span className="text-4xl font-bold text-white">{plan.price}</span>
-                  <span className="text-gray-400">{plan.period}</span>
+                  <span className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">{plan.price}</span>
+                  <span className="text-gray-600 dark:text-gray-400">{plan.period}</span>
                 </div>
-                <p className="text-sm text-gray-400">{plan.credits}</p>
+                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">{plan.credits}</p>
               </div>
-              <ul className="space-y-3 mb-6">
+              <ul className="space-y-2 md:space-y-3 mb-6">
                 {plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
-                    <Check className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-gray-700 dark:text-gray-300">
+                    <Check className="w-4 h-4 text-purple-500 dark:text-purple-400 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -132,7 +132,7 @@ export function PricingSection() {
                 className={`w-full py-3 rounded-lg text-sm font-semibold transition-all ${
                   plan.highlighted
                     ? 'bg-purple-600 text-white hover:bg-purple-700'
-                    : 'bg-white/10 text-white hover:bg-white/20'
+                    : 'bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20'
                 }`}
               >
                 {plan.button}
@@ -142,27 +142,27 @@ export function PricingSection() {
         </div>
 
         {/* Top-up Credits */}
-        <div className="bg-gray-900/30 border border-white/10 rounded-2xl p-8">
-          <h3 className="text-2xl font-bold text-white mb-6 text-center">
+        <div className="bg-gray-100 dark:bg-gray-900/30 border border-gray-200 dark:border-white/10 rounded-2xl p-6 md:p-8">
+          <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6 text-center">
             {language === 'zh' ? '按需充值点数' : 'Top-up Credits'}
           </h3>
-          <div className="grid md:grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4">
             {topups.map((topup, index) => (
-              <div key={index} className="bg-gray-800/50 border border-white/10 rounded-xl p-4 text-center">
-                <div className="text-2xl font-bold text-white mb-1">
+              <div key={index} className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-center">
+                <div className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-1">
                   {topup.credits} {language === 'zh' ? '点数' : 'credits'}
                 </div>
-                <div className="text-3xl font-bold text-purple-400 mb-1">{topup.price}</div>
-                <div className="text-sm text-gray-400 mb-2">{topup.unit}</div>
+                <div className="text-2xl md:text-3xl font-bold text-purple-500 dark:text-purple-400 mb-1">{topup.price}</div>
+                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-2">{topup.unit}</div>
                 {topup.badge && (
-                  <span className="inline-block px-3 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">
+                  <span className="inline-block px-3 py-1 bg-green-500/20 text-green-600 dark:text-green-400 text-xs rounded-full">
                     {topup.badge}
                   </span>
                 )}
               </div>
             ))}
           </div>
-          <p className="text-sm text-gray-400 text-center">
+          <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 text-center">
             {language === 'zh' ? '💡 充值点数永不过期，优先消耗' : '💡 Top-up credits never expire and are used first'}
           </p>
         </div>

@@ -29,22 +29,22 @@ export function RateLimitsSection() {
   ];
 
   return (
-    <section ref={ref} className="py-16 bg-gradient-to-b from-black to-gray-900">
+    <section ref={ref} className="py-12 md:py-16 bg-gradient-to-b from-white to-gray-50 dark:from-black dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`text-center mb-12 transition-all duration-600 ${isVisible ? 'animate-[fadeInUp_0.6s_ease-out_both]' : 'opacity-0'}`}>
-          <h2 className="text-3xl font-bold text-white mb-4">
+        <div className={`text-center mb-8 md:mb-12 transition-all duration-600 ${isVisible ? 'animate-[fadeInUp_0.6s_ease-out_both]' : 'opacity-0'}`}>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
             {language === 'zh' ? '速率与可靠性' : 'Rate Limits & Reliability'}
           </h2>
         </div>
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {limits.map((limit, index) => (
             <div
               key={index}
-              className="bg-gray-900/50 backdrop-blur border border-white/10 rounded-xl p-6 text-center hover:border-purple-500/50 transition-all"
+              className="bg-gray-100 dark:bg-gray-900/50 backdrop-blur border border-gray-200 dark:border-white/10 rounded-xl p-5 md:p-6 text-center hover:border-purple-400 dark:hover:border-purple-500/50 transition-all"
             >
-              <h3 className="text-lg font-semibold text-white mb-3">{limit.title}</h3>
-              <div className="text-2xl font-bold text-purple-400 mb-2">{limit.value}</div>
-              <p className="text-sm text-gray-400">{limit.description}</p>
+              <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-2 md:mb-3">{limit.title}</h3>
+              <div className="text-xl md:text-2xl font-bold text-purple-500 dark:text-purple-400 mb-2">{limit.value}</div>
+              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">{limit.description}</p>
             </div>
           ))}
         </div>

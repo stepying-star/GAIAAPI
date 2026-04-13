@@ -44,18 +44,18 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-black border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+    <footer className="bg-gray-100 dark:bg-black border-t border-gray-200 dark:border-white/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-8 md:mb-12">
           {Object.entries(footerSections).map(([key, section]) => (
-            <div key={key}>
-              <h3 className="text-white font-semibold mb-4">{section.title}</h3>
+            <div key={key} className="text-center sm:text-left">
+              <h3 className="text-gray-900 dark:text-white font-semibold mb-3 md:mb-4">{section.title}</h3>
               <ul className="space-y-2">
                 {section.links.map((link, index) => (
                   <li key={index}>
                     <a
                       href={link.href}
-                      className="text-sm text-gray-400 hover:text-white transition-colors"
+                      className="text-xs md:text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                     >
                       {link.label}
                     </a>
@@ -66,18 +66,18 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="pt-8 border-t border-white/10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+        <div className="pt-6 md:pt-8 border-t border-gray-200 dark:border-white/10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
+              <div className="text-lg md:text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
                 GAIAAPI
               </div>
-              <div className="text-sm text-gray-400">
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
                 {t('brand.name')}
               </div>
             </div>
 
-            <div className="text-sm text-gray-400">
+            <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
               © 2026 GAIAAPI. All rights reserved.
             </div>
           </div>

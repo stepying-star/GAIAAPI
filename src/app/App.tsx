@@ -6,7 +6,6 @@ import { WhyChooseSection } from './components/WhyChooseSection';
 import { CapabilitiesSection } from './components/CapabilitiesSection';
 import { ModelsSection } from './components/ModelsSection';
 import { CodeIntegrationSection } from './components/CodeIntegrationSection';
-import { PlaygroundBanner } from './components/PlaygroundBanner';
 import { SolutionsSection } from './components/SolutionsSection';
 import { TrustSection } from './components/TrustSection';
 import { RateLimitsSection } from './components/RateLimitsSection';
@@ -33,7 +32,6 @@ export default function App() {
           <CapabilitiesSection />
           <ModelsSection />
           <CodeIntegrationSection />
-          <PlaygroundBanner />
           <SolutionsSection />
           <TrustSection />
           <RateLimitsSection />

@@ -30,7 +30,7 @@ const translations = {
     'brand.tagline': '统一接入多模型的 AI 接口平台',
 
     // Hero
-    'hero.title': '一个接口，接入多种 AI 模型',
+    'hero.title': '一站式 AI 模型统一调用平台 — 30+ 模型，一个接口',
     'hero.subtitle': '让模型调用更灵活，让成本更可控。',
     'hero.description': 'GAIAAPI 帮助开发者与企业统一接入文本、图像、音频与视频模型，加快产品上线与业务落地。',
     'hero.cta.start': '申请试用',
@@ -148,7 +148,7 @@ const translations = {
     'brand.tagline': 'Unified AI Model Access Layer',
 
     // Hero
-    'hero.title': 'One API for Multiple AI Models',
+    'hero.title': 'Unified AI Model Hub — 30+ Models, One API',
     'hero.subtitle': 'More flexible access. More controllable cost.',
     'hero.description': 'GAIAAPI helps developers and enterprises unify access to text, image, audio, and video models for faster launch and better operational efficiency.',
     'hero.cta.start': 'Request Access',

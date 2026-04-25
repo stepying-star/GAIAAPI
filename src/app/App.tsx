@@ -22,6 +22,7 @@ export default function App() {
   useMouseEffects();
   const [currentPage, setCurrentPage] = useState<'home' | 'console'>('home');
 
+
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-black text-white">

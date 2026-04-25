@@ -1,5 +1,5 @@
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Shield, Activity, Headphones, FileCheck } from 'lucide-react';
+import { Zap, Shield, Gauge, Lock, Key, Code2 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export function TrustSection() {
@@ -7,10 +7,12 @@ export function TrustSection() {
   const { ref, isVisible } = useScrollReveal();
 
   const trustFactors = [
-    { icon: Activity, key: 'trust.stability', descKey: 'trust.stability.desc' },
-    { icon: Shield, key: 'trust.security', descKey: 'trust.security.desc' },
-    { icon: Headphones, key: 'trust.support', descKey: 'trust.support.desc' },
-    { icon: FileCheck, key: 'trust.sla', descKey: 'trust.sla.desc' }
+    { icon: Zap, key: 'trust.routing', descKey: 'trust.routing.desc' },
+    { icon: Shield, key: 'trust.sla', descKey: 'trust.sla.desc' },
+    { icon: Gauge, key: 'trust.latency', descKey: 'trust.latency.desc' },
+    { icon: Lock, key: 'trust.security', descKey: 'trust.security.desc' },
+    { icon: Key, key: 'trust.apikey', descKey: 'trust.apikey.desc' },
+    { icon: Code2, key: 'trust.switch', descKey: 'trust.switch.desc' }
   ];
 
   return (
@@ -25,7 +27,7 @@ export function TrustSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {trustFactors.map((factor, index) => {
             const Icon = factor.icon;
             return (
@@ -50,9 +52,9 @@ export function TrustSection() {
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-12 md:mt-16">
           {[
-            { value: '99.9%', label: 'Uptime SLA' },
-            { value: '< 200ms', label: 'Avg Response Time' },
-            { value: '24/7', label: 'Technical Support' }
+            { value: '30+', label: t('trust.title') === '为什么选择 GAIAAPI' ? '主流模型' : 'AI Models' },
+            { value: '50ms', label: t('trust.title') === '为什么选择 GAIAAPI' ? '平均延迟' : 'Avg Latency' },
+            { value: '30%+', label: t('trust.title') === '为什么选择 GAIAAPI' ? '成本优化' : 'Cost Savings' }
           ].map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
